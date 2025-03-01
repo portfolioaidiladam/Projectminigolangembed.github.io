@@ -2,12 +2,12 @@
 package main_test
 
 import (
-	"embed"     // Package untuk mendukung embedding file statis
-	_ "embed"   // Import blank untuk mengaktifkan directive go:embed
-	"fmt"       // Package untuk formatting dan printing
-	"io/fs"     // Package untuk operasi filesystem
-	"io/ioutil" // Package untuk utilitas I/O
-	"testing"   // Package untuk unit testing
+	"embed"   // package untuk mendukung embedding file statis
+	_ "embed" // import blank untuk mengaktifkan directive go:embed
+	"fmt"     // package untuk fungsi print
+	"io/fs"   // package untuk operasi filesystem
+	"os"      // Pengganti io/ioutil
+	"testing" // package untuk unit testing
 )
 
 // version menyimpan isi dari file version.txt
@@ -30,8 +30,7 @@ var logo []byte
 
 // TestByte menguji embedding dan penulisan file binary
 func TestByte(t *testing.T) {
-	// Menulis konten logo ke file baru dengan permission penuh
-	err := ioutil.WriteFile("logo_new.png", logo, fs.ModePerm)
+	err := os.WriteFile("logo_new.png", logo, fs.ModePerm)
 	if err != nil {
 		panic(err)
 	}
@@ -68,10 +67,9 @@ func TestPathMatcher(t *testing.T) {
 	dirEntries, _ := path.ReadDir("files")
 	// Iterasi setiap entri
 	for _, entry := range dirEntries {
-		// Cek apakah entri bukan direktori
 		if !entry.IsDir() {
 			fmt.Println(entry.Name())
-			// Membaca dan menampilkan isi file
+			// Membaca dan menampilkan isi setiap file
 			file, _ := path.ReadFile("files/" + entry.Name())
 			fmt.Println(string(file))
 		}
